@@ -1,0 +1,206 @@
+Broken Access Control
+Cryptographic Failures
+Injection
+Insecure Design
+Security Misconfiguration
+Vulnerable and Outdated Components
+Identification and Authentication Failures
+Software and Data Integrity Failures
+Security Logging and Monitoring Failures
+Server-Side Request Forgery
+Cross Site Scripting
+Privilege Escalation
+SQL Injection
+Server Information Disclosure
+Security Headers Missing
+Sensitive Information Disclosure
+Lockout Policy Issue
+IDOR (Insecure Direct Object References)
+Session Hijacking
+Host Header Injection
+Clickjacking
+Directory Listing
+HTML Injection
+No Rate Limiting
+Weak Ciphers
+Exif Data Disclosure
+Malicious File Upload
+Unnecessary HTTP Methods Allowed
+Cookie Headers State
+Old Password Reuse
+Insecure Transportation Security Protocols Supported
+AngularJS Client-Side Template Injection
+Apache Tomcat JK Connector Security Bypass
+Authentication Bypass via MongoDB Operator Injection
+Email Header Injection
+Email Injection
+File Tampering
+Host Header Attack
+HTML Attribute Injection
+MongoDB Injection
+Server-Side Misconfiguration
+Auto-Complete Status Enabled
+Same Seed in Pseudo-Random Number Generator (PRNG)
+Predictable Seed in Pseudo-Random Number Generator (PRNG)
+Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)
+Generation of Predictable Numbers or Identifiers
+Improper Verification of Cryptographic Signature
+Unprotected Transport of Credentials
+OWASP Top Ten 2007 Category A9 - Insecure Communications
+Selection of Less-Secure Algorithm During Negotiation ('Algorithm Downgrade')
+Use of a One-Way Hash without a Salt
+Use of a One-Way Hash with a Predictable Salt
+Use of RSA Algorithm without OAEP
+Insufficient Transport Layer Protection
+Use of Password Hash With Insufficient Computational Effort
+Improper Input Validation
+Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')
+Failure to Sanitize Special Elements into a Different Plane (Special Element Injection)
+Improper Neutralization of Special Elements used in a Command ('Command Injection')
+Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')
+Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)
+Improper Neutralization of Script in Attributes in a Web Page
+Improper Neutralization of Alternate XSS Syntax
+Improper Neutralization of Argument Delimiters in a Command ('Argument Injection')
+Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')
+XML Injection (aka Blind XPath Injection)
+Improper Neutralization of CRLF Sequences ('CRLF Injection')
+Improper Control of Generation of Code ('Code Injection')
+Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')
+Incorrect Permission Assignment for Critical Resource
+Improper Check for Unusual or Exceptional Conditions
+Use of Hard-coded Credentials
+Execution with Unnecessary Privileges
+Improper Neutralization of Null Byte or NUL Character
+Improper Authentication
+Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')
+Improper Neutralization of Special Elements used in a SQL Command ('SQL Injection')
+Improper Neutralization of Special Elements used in an XPath Expression ('XPath Injection')
+Improper Handling of Case Sensitivity
+Improper Handling of Parameters
+Use of a Broken or Risky Cryptographic Algorithm
+Cleartext Transmission of Sensitive Information
+Exposure of Sensitive Information to an Unauthorized Actor
+Improper Validation of Integrity Check Value
+Insufficiently Protected Credentials
+Improper Access Control
+Improper Restriction of Excessive Authentication Attempts
+Improper Handling of Length Parameter Inconsistency
+Improper Handling of Unicode Encoding
+Insertion of Sensitive Information into Log File
+Insufficient Logging
+Server Side Request Forgery
+Out-of-bounds Write
+Use After Free
+Out-of-bounds Read
+NULL Pointer Dereference
+Integer Overflow or Wraparound
+Improper Restriction of Operations within the Bounds of a Memory Buffer
+Concurrent Execution using Shared Resource with Improper Synchronization ('Race Condition')
+Untrusted Search Path
+Download of Code Without Integrity Check
+Deserialization of Untrusted Data
+Reliance on Cookies without Validation and Integrity Checking
+Reliance on Cookies without Validation and Integrity Checking in a Security Decision
+Inclusion of Functionality from Untrusted Control Sphere
+Inclusion of Web Functionality from an Untrusted Source
+Improperly Controlled Modification of Dynamically-Determined Object Attributes
+Improper Output Neutralization for Logs
+Omission of Security-relevant Information
+Session Fixation
+Weak Password Requirements
+Insufficient Session Expiration
+Unverified Password Change
+Weak Password Recovery Mechanism for Forgotten Password
+Use of Hard-coded Credentials
+Improper Verification of Source of a Communication Channel
+Lockout Mechanism Errors
+Insufficient Verification of Data Authenticity
+Missing Support for Integrity Check
+Authentication Bypass by Spoofing
+Authentication Bypass by Capture-replay
+Improper Certificate Validation
+Improper Validation of Certificate with Host Mismatch
+Channel Accessible by Non-Endpoint
+Authentication Bypass by Assumed-Immutable Data
+Missing Critical Step in Authentication
+Missing Authentication for Critical Function
+Improper Restriction of Excessive Authentication Attempts
+Origin Validation Error
+Sensitive Cookie Without "HttpOnly" Flag
+OWASP Top Ten 2017 Category A6 - Security Misconfiguration
+ASP.NET Misconfiguration: Improper Model Validation
+OWASP Top 10 2013: Using Components with Known Vulnerabilities
+2017 Top 10 A9: Using Components with Known Vulnerabilities
+Use of Unmaintained Third Party Components
+Credentials Management Errors
+Use of Hard-coded Password
+Improper Authentication
+Authentication Bypass Using an Alternate Path or Channel
+Sensitive Cookie Without "HttpOnly" Flag
+OWASP Top Ten 2017 Category A6 - Security Misconfiguration
+ASP.NET Misconfiguration: Improper Model Validation
+OWASP Top 10 2013: Using Components with Known Vulnerabilities
+2017 Top 10 A9: Using Components with Known Vulnerabilities
+Use of Unmaintained Third Party Components
+Credentials Management Errors
+Use of Hard-coded Password
+Improper Authentication
+Authentication Bypass Using an Alternate Path or Channel
+.NET Misconfiguration: Use of Impersonation
+Exposure of Sensitive Information Through Environmental Variables
+Java Runtime Error Message Containing Sensitive Information
+Inclusion of Sensitive Information in an Include File
+Use of Hard-coded, Security-relevant Constants
+Improper Restriction of XML External Entity Reference
+Sensitive Cookie in HTTPS Session Without "Secure" Attribute
+Missing Custom Error Page
+Improper Restriction of Recursive Entity References in DTDs ('XML Entity Expansion')
+Permissive Cross-domain Policy with Untrusted Domains
+Use of Implicit Intent for Sensitive Communication
+Improper Restriction of Rendered UI Layers or Frames
+Improper Use of Validation Framework
+7PK - Environment
+ASP.NET Misconfiguration: Creating Debug Binary
+ASP.NET Misconfiguration: Password in Configuration File
+External Control of System or Configuration Setting
+Configuration
+Password in Configuration File
+Cleartext Storage of Sensitive Information in a Cookie
+External Control of Critical State Data
+Reliance on File Name or Extension of Externally-Supplied File
+Trusting HTTP Permission Methods on the Server Side
+Insufficient Compartmentalization
+Reliance on Security Through Obscurity
+Violation of Secure Design Principles
+Improper Control of Interaction Frequency
+Reliance on Untrusted Inputs in a Security Decision
+Business Logic Errors
+Improper Enforcement of Behavioral Workflow
+Inconsistent Interpretation of HTTP Requests ('HTTP Request Smuggling')
+User Interface (UI) Misrepresentation of Critical Information
+External Control of Assumed-Immutable Web Parameter
+Trust Boundary Violation
+Insufficiently Protected Credentials
+Use of Web Browser Cache Containing Sensitive Information
+Use of Persistent Cookies Containing Sensitive Information
+J2EE Bad Practices: Non-serializable Object Stored in Session
+Use of GET Request Method With Sensitive Query Strings
+Client-Side Enforcement of Server-Side Security
+Incorrect Privilege Assignment
+Improper Privilege Management
+Improper Handling of Insufficient Permissions or Privileges
+Missing Encryption of Sensitive Data
+Cleartext Storage of Sensitive Information
+Cleartext Storage in a File or on Disk
+Cleartext Storage of Sensitive Information in Memory
+Unprotected Primary Channel
+Deployment of Wrong Handler
+Unrestricted Upload of File with Dangerous Type
+Generation of Error Message Containing Sensitive Information
+Exposure of Sensitive Information Due to Incompatible Policies
+Improper Handling of Extra Parameters
+Unprotected Storage of Credentials
+Storing Passwords in a Recoverable Format

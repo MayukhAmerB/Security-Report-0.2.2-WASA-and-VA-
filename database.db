@@ -1,0 +1,21 @@
+import mysql.connector
+
+def fetch_vulnerability_data(vulnerability_name):
+    # Connect to the MySQL database
+    connection = mysql.connector.connect(
+        host='127.0.0.1',
+        user='root',
+        password='root',
+        database='security_assessment_tool'
+    )
+    cursor = connection.cursor(dictionary=True)
+
+    # Fetch vulnerability data
+    query = "SELECT * FROM vulnerabilities WHERE name LIKE %s"
+    cursor.execute(query, (f'%{vulnerability_name}%',))
+    result = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    return result

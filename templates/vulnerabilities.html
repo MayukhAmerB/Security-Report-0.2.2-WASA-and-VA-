@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Selected Vulnerabilities" />
+    <meta name="author" content="Mayukh" />
+    <title>Select Vulnerabilities</title>
+    <link rel="icon" type="image/x-icon" href="../static/assets/favicon.ico" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/styles.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #31473A;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #EDF4F2;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #31473A;
+            color: #EDF4F2;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .vulnerability-container {
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%;
+            border: 1px solid #31473A;
+            padding: 10px;
+            background-color: #EDF4F2;
+            border-radius: 5px;
+            display: none; /* Initially hidden */
+        }
+
+        .vulnerability-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .vulnerability-item label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #31473A;
+        }
+
+        .full-width-btn {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px; /* Reduced padding */
+            font-size: 0.9rem; /* Reduced font size */
+            background-color: #31473A;
+            color: #EDF4F2;
+            border: 1px solid #31473A;
+            border-radius: 20px; /* Increased border radius for more curves */
+        }
+
+        .full-width-btn:hover {
+            background-color: #EDF4F2;
+            color: #31473A;
+            border: 1px solid #31473A;
+        }
+
+        .right-align {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background-color: #31473A;
+            border-color: #31473A;
+            border-radius: 20px; /* Increased border radius */
+        }
+
+        .btn-primary:hover {
+            background-color: #EDF4F2;
+            color: #31473A;
+            border-color: #31473A;
+        }
+
+        .btn-secondary {
+            background-color: #EDF4F2;
+            color: #31473A;
+            border-color: #31473A;
+            border-radius: 20px; /* Increased border radius */
+        }
+
+        .btn-secondary:hover {
+            background-color: #31473A;
+            color: #EDF4F2;
+            border-color: #31473A;
+        }
+
+        .list-group-item {
+            border: 1px solid #31473A;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #EDF4F2;
+        }
+
+        .btn-danger {
+            background-color: #d9534f;
+            border-color: #d9534f;
+            border-radius: 20px; /* Increased border radius */
+        }
+
+        .btn-danger:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item:hover {
+            background-color: #EDF4F2;
+            color: #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Selected Vulnerabilities</h1>
+
+        <!-- Section 1: Select Vulnerability and Generate Report Button -->
+        <section id="section1">
+            <div class="mt-4">
+                <button type="button" class="btn btn-secondary full-width-btn" onclick="toggleVulnerabilityContainer()">Select Vulnerabilities</button>
+                <div class="vulnerability-container mt-3" id="vulnerabilityContainer">
+                    <input type="text" id="searchVulnerability" class="search-box" placeholder="Search vulnerabilities...">
+                </div>
+            </div>
+            <div class="right-align mt-3">
+                <button type="button" class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+            </div>
+            <div id="feedback" class="mt-3 text-danger"></div>
+            <div id="chosenVulnerabilities" class="mt-3 text-black-50"></div>
+            <ul class="list-group mt-3" id="selectedVulnerabilityList"></ul>
+        </section>
+
+        <!-- Section 2: Document Control Button -->
+        <section id="section2" class="mt-5">
+            <button type="button" class="btn btn-primary full-width-btn" onclick="documentControl()">Document Control</button>
+        </section>
+
+        <!-- Section 3: Back, Download Report, and Discard Report Buttons -->
+        <section id="section3" class="mt-5">
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="goBack()">Back</button>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="downloadDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Download Report
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="downloadDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="downloadReport('word')">WORD</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="downloadReport('text')">TEXT</a></li>
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="discardReport()">Discard Report</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedVulnerabilities = [];
+
+        function toggleVulnerabilityContainer() {
+            const container = document.getElementById('vulnerabilityContainer');
+            container.style.display = (container.style.display === 'none' || container.style.display === '') ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function(event) {
+            const container = document.getElementById('vulnerabilityContainer');
+            const button = document.querySelector('.full-width-btn');
+            if (!container.contains(event.target) && !button.contains(event.target)) {
+                container.style.display = 'none';
+            }
+        });
+
+        function loadVulnerabilities() {
+            fetch('../static/data/vuln_names.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const vulnerabilities = data.split('\n');
+                    const vulnerabilityContainer = document.getElementById('vulnerabilityContainer');
+                    vulnerabilities.forEach(vulnerability => {
+                        if (vulnerability.trim()) {
+                            const div = document.createElement('div');
+                            div.className = 'vulnerability-item';
+                            const label = document.createElement('label');
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.value = vulnerability.trim();
+                            checkbox.addEventListener('change', updateSelectedVulnerabilities);
+                            label.appendChild(checkbox);
+                            label.appendChild(document.createTextNode(vulnerability.trim()));
+                            div.appendChild(label);
+                            vulnerabilityContainer.appendChild(div);
+                        }
+                    });
+
+                    // Load previously selected vulnerabilities
+                    const previouslySelected = JSON.parse(localStorage.getItem('selectedVulnerabilities') || '[]');
+                    previouslySelected.forEach(selected => {
+                        const checkbox = document.querySelector(`input[value="${selected}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+
+                    updateSelectedVulnerabilities();
+                })
+                .catch(error => console.error('Error loading vulnerabilities:', error));
+        }
+
+        function filterVulnerabilities() {
+            const searchTerm = document.getElementById('searchVulnerability').value.toLowerCase();
+            const vulnerabilityItems = document.querySelectorAll('.vulnerability-item');
+
+            vulnerabilityItems.forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                const labelText = checkbox.value.toLowerCase();
+                if (labelText.includes(searchTerm)) {
+                    item.style.display = 'block'; // Show matching items
+                } else {
+                    item.style.display = 'none'; // Hide non-matching items
+                }
+            });
+        }
+
+        document.getElementById('searchVulnerability').addEventListener('input', filterVulnerabilities);
+
+        function updateSelectedVulnerabilities() {
+            selectedVulnerabilities = [];
+            const checkboxes = document.querySelectorAll('.vulnerability-item input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selectedVulnerabilities.push(checkbox.value);
+                }
+            });
+
+            // Store selected vulnerabilities in local storage
+            localStorage.setItem('selectedVulnerabilities', JSON.stringify(selectedVulnerabilities));
+
+            const chosenVulnerabilitiesDiv = document.getElementById('chosenVulnerabilities');
+            chosenVulnerabilitiesDiv.textContent = selectedVulnerabilities.length > 0 ?
+                'Chosen Vulnerabilities: ' + selectedVulnerabilities.join(', ') :
+                'No vulnerabilities chosen.';
+
+            updateSelectedVulnerabilityList();
+        }
+
+        function updateSelectedVulnerabilityList() {
+            const selectedVulnerabilityList = document.getElementById('selectedVulnerabilityList');
+            selectedVulnerabilityList.innerHTML = '';
+            selectedVulnerabilities.forEach((vulnerability, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.textContent = vulnerability;
+
+                const editButton = document.createElement('a');
+                editButton.href = `/edit_vulnerability/${index}`;
+                editButton.className = 'btn btn-primary';
+                editButton.textContent = 'Edit';
+
+                li.appendChild(editButton);
+                selectedVulnerabilityList.appendChild(li);
+            });
+        }
+
+        function generateReport() {
+            if (selectedVulnerabilities.length === 0) {
+                document.getElementById('feedback').textContent = 'Please select at least one vulnerability.';
+                return;
+            }
+
+            // Make selected vulnerabilities visible
+            const container = document.getElementById('selectedVulnerabilityList');
+            container.style.display = 'block';
+
+            fetch('/get_vulnerability', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ vulnerabilities: selectedVulnerabilities, category: 'WASA' }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Keep selected vulnerabilities in local storage
+                    localStorage.setItem('selectedVulnerabilitiesData', JSON.stringify(data.selected_vulnerabilities));
+                    window.location.href = data.redirect_url;
+                } else {
+                    document.getElementById('feedback').textContent = data.message;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('feedback').textContent = 'Error occurred. Please try again.';
+            });
+        }
+
+        function documentControl() {
+            window.location.href = '/document_control';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function downloadReport(format) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = 'Downloading report...';
+
+            fetch(`/download_report?format=${format}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `vulnerabilities_report.${format === 'word' ? 'docx' : 'txt'}`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                feedback.textContent = 'Report downloaded successfully.';
+
+                // Clear selected vulnerabilities and local storage
+                localStorage.removeItem('selectedVulnerabilities');
+                localStorage.removeItem('selectedVulnerabilitiesData');
+                selectedVulnerabilities = [];
+                updateSelectedVulnerabilityList();
+                // Trigger page refresh
+                location.reload();
+                })
+            .catch(error => {
+                console.error('Error:', error);
+                feedback.textContent = 'Error occurred. Please try again.';
+            });
+        }
+
+        function discardReport() {
+            fetch('/discard_report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('feedback').textContent = data.message;
+                location.reload();
+
+                // Clear selected vulnerabilities and local storage
+                localStorage.removeItem('selectedVulnerabilities');
+                localStorage.removeItem('selectedVulnerabilitiesData');
+                selectedVulnerabilities = [];
+                updateSelectedVulnerabilityList();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('feedback').textContent = 'Error occurred. Please try again.';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadVulnerabilities();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Preparation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .table-container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: #0074CC;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #FFF;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border: 2px solid #31473A;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 2px solid #31473A;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #31473A;
+            color: #EDF4F2;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #EDF4F2;
+            color: #31473A;
+        }
+
+        td[contenteditable="true"] {
+            background-color: #FFF;
+            cursor: text;
+        }
+
+        td:focus {
+            outline: none;
+            background-color: #EDF4F2;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 2px solid #31473A;
+            border-radius: 4px;
+            background-color: #FFF;
+            color: #31473A;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #0074CC;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h1>Document Preparation</h1>
+        <table id="document-control-table">
+            <tr>
+                <th colspan="2">Document Preparation</th>
+            </tr>
+            <tr>
+                <td>Document Title</td>
+                <td contenteditable="true" id="Document_Title"></td>
+            </tr>
+            <tr>
+                <td>Document ID</td>
+                <td contenteditable="true" id="Document_ID"></td>
+            </tr>
+            <tr>
+                <td>Document Version</td>
+                <td contenteditable="true" id="Document_Version"></td>
+            </tr>
+            <tr>
+                <td>Prepared by</td>
+                <td contenteditable="true" id="Prepared_by"></td>
+            </tr>
+            <tr>
+                <td>Reviewed by</td>
+                <td contenteditable="true" id="Reviewed_by"></td>
+            </tr>
+            <tr>
+                <td>Approved by</td>
+                <td contenteditable="true" id="Approved_by"></td>
+            </tr>
+            <tr>
+                <td>Released by</td>
+                <td contenteditable="true" id="Released_by"></td>
+            </tr>
+            <tr>
+                <td>Release date</td>
+                <td><input type="date" id="Release_date"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="button-container">
+        <button onclick="saveTable()">Save</button>
+        <button onclick="addRow()">Add Row</button>
+        <button onclick="deleteLastRow()">Delete Last Row</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+        fetch('/get_document_preparation_data')
+            .then(response => response.json())
+            .then(data => {
+                Object.keys(data).forEach((key) => {
+                    const element = document.getElementById(key.replace(/ /g, '_'));
+                    if (element) {
+                        if (element.tagName === 'INPUT' && element.type === 'date') {
+                            element.value = data[key];
+                        } else {
+                            element.innerText = data[key];
+                        }
+                    }
+                });
+            })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+        });
+
+        function saveTable() {
+            const tableData = {};
+            const rows = document.querySelectorAll('#document-control-table tr');
+            rows.forEach((row, index) => {
+                if (index > 0) { // Skip header row
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length > 1) {
+                        const key = cells[0].innerText.trim().replace(/ /g, '_');
+                        const valueElement = cells[1];
+                        if (valueElement.querySelector('input[type="date"]')) {
+                            tableData[key] = valueElement.querySelector('input[type="date"]').value;
+                        } else {
+                            tableData[key] = valueElement.innerText.trim();
+                        }
+                    }
+                }
+            });
+
+            fetch('/save_document_preparation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tableData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                     localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = '/document_control'; // Redirect to document_control.html
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

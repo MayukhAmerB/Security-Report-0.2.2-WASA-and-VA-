@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #31473A;
+            border-radius: 5px;
+            background-color: #FFFFFF;
+            color: #31473A;
+            font-size: 16px;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Introduction</h1>
+        <textarea id="introduction-text">
+This report presents the results and findings of the Web Application Security Assessment conducted for “SoulAce Consulting Pvt Ltd.” identified as the Web Application Security Assessment. This assessment was performed by “ITOrizin Technology Solutions Pvt Ltd”. The purpose of this assessment was to identify vulnerabilities and other security issues that could affect the Web Application (https://beta.s2platform.com) of “SoulAce Consulting Pvt Ltd.”. The security assessment was carried out from the “ITOrizin” premises in Kolkata. The findings in this report reflect the conditions found during the testing, and do not necessarily reflect current conditions.
+        </textarea>
+    </div>
+    <div class="button-container">
+        <button onclick="saveIntroduction()">Save</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const documentData = {{ document_data|tojson }};
+            const textarea = document.getElementById('introduction-text');
+            if (documentData) {
+                textarea.value = documentData.introduction || textarea.value;
+            }
+        });
+
+        function saveIntroduction() {
+            const introductionText = document.getElementById('introduction-text').value;
+
+            fetch('/save_introduction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ introduction: introductionText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

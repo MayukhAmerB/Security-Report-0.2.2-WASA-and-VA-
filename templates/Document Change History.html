@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Change History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .table-container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border: 2px solid #31473A;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 2px solid #31473A;
+            vertical-align: top;
+        }
+        th {
+            background-color: #31473A;
+            color: #EDF4F2;
+            font-weight: bold;
+        }
+        td {
+            background-color: #EDF4F2;
+            color: #31473A;
+        }
+        th.table-title {
+            text-align: center;
+        }
+        td[contenteditable="true"] {
+            background-color: #FFF;
+            cursor: text;
+        }
+        td:focus {
+            outline: none;
+            background-color: #EDF4F2;
+        }
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 2px solid #31473A;
+            border-radius: 4px;
+            background-color: #FFF;
+            color: #31473A;
+        }
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #0074CC;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3" class="table-title">Document Change History</th>
+                </tr>
+                <tr>
+                    <th>Version</th>
+                    <th>Date</th>
+                    <th>Remarks / Reason of change</th>
+                </tr>
+            </thead>
+            <tbody id="change-history-table-body">
+                <!-- Rows will be dynamically populated -->
+            </tbody>
+        </table>
+    </div>
+    <div class="button-container">
+        <button onclick="saveTable()">Save</button>
+        <button onclick="addRow()">Add Row</button>
+        <button onclick="deleteLastRow()">Delete Last Row</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            fetch('/get_document_change_history_data')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('change-history-table-body');
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    data.forEach(rowData => {
+                        const newRow = document.createElement('tr');
+                        newRow.innerHTML = `
+                            <td contenteditable="true">${rowData.version}</td>
+                            <td><input type="date" value="${rowData.date}"></td>
+                            <td contenteditable="true">${rowData.remarks}</td>
+                        `;
+                        tableBody.appendChild(newRow);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+        function saveTable() {
+            const tableData = [];
+            const rows = document.querySelectorAll('#change-history-table-body tr');
+            rows.forEach(row => {
+                const rowData = {
+                    version: row.cells[0].innerText,
+                    date: row.cells[1].querySelector('input[type="date"]').value,
+                    remarks: row.cells[2].innerText
+                };
+                tableData.push(rowData);
+            });
+
+            fetch('/save_document_change_history', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tableData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function addRow() {
+            const tableBody = document.getElementById('change-history-table-body');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td contenteditable="true"></td>
+                <td><input type="date"></td>
+                <td contenteditable="true"></td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+
+        function deleteLastRow() {
+            const tableBody = document.getElementById('change-history-table-body');
+            const rowCount = tableBody.rows.length;
+            if (rowCount > 1) { // Ensure at least one row remains
+                tableBody.deleteRow(rowCount - 1);
+            } else {
+                alert('Cannot delete the last row.');
+            }
+        }
+    </script>
+</body>
+</html>

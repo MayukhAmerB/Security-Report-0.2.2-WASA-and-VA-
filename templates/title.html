@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Application Security Assessment Report</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #FFFFFF; color: #000000; text-align: center;">
+
+    <div style="margin-top: 20px;">
+        <h1 contenteditable="true" id="main_title" style="font-size: 24px; color: #3366CC;">Web Application Security Assessment Report</h1>
+        <h2 contenteditable="true" id="sub_title" style="font-size: 20px; color: #3366CC;">For</h2>
+        <h3 contenteditable="true" id="app_name" style="font-size: 18px; color: #3366CC;">Web Application</h3>
+        <p contenteditable="true" id="url" style="font-size: 16px; color: #3366CC;">(https://beta.s2platform.com)</p>
+    </div>
+
+    <div style="margin-top: 50px;">
+        <img id="logo" src="" alt="Project Logo" style="width: 150px; height: auto; display: block; margin: 0 auto;">
+        <br>
+        <button onclick="removeLogo()" style="display: block; margin: 10px auto; padding: 5px 10px; background-color: #FF0000; color: #FFFFFF; border: none; cursor: pointer;">Remove Logo</button>
+        <br>
+        <input type="file" id="upload" style="display: block; margin: 10px auto;" onchange="addLogo(event)">
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3 contenteditable="true" id="company_name" style="font-size: 18px; color: #3366CC;">Placeholder Pvt Ltd.</h3>
+        <p contenteditable="true" id="company_address" style="font-size: 16px; color: #000000;">
+            P-166, Block G, New Alipore, Kolkata, West Bengal 700053
+        </p>
+    </div>
+
+    <div class="button-container" style="margin-top: 20px;">
+        <button onclick="saveData()" style="display: block; margin: 10px auto; padding: 5px 10px; background-color: #31473A; color: #FFFFFF; border: none; cursor: pointer;">Save</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            fetch('/get_title_data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('main_title').innerText = data.main_title || 'Web Application Security Assessment Report';
+                    document.getElementById('sub_title').innerText = data.sub_title || 'For';
+                    document.getElementById('app_name').innerText = data.app_name || 'Web Application';
+                    document.getElementById('url').innerText = data.url || '(https://beta.s2platform.com)';
+                    document.getElementById('company_name').innerText = data.company_name || 'Placeholder Pvt Ltd.';
+                    document.getElementById('company_address').innerText = data.company_address || 'P-166, Block G, New Alipore, Kolkata, West Bengal 700053';
+
+                    if (data.logo) {
+                        const logo = document.getElementById('logo');
+                        logo.src = data.logo;
+                        logo.style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+
+        function removeLogo() {
+            document.getElementById('logo').style.display = 'none';
+        }
+
+        function addLogo(event) {
+            const logo = document.getElementById('logo');
+            logo.src = URL.createObjectURL(event.target.files[0]);
+            logo.style.display = 'block';
+        }
+
+        function saveData() {
+            const data = {
+                main_title: document.getElementById('main_title').innerText.trim(),
+                sub_title: document.getElementById('sub_title').innerText.trim(),
+                app_name: document.getElementById('app_name').innerText.trim(),
+                url: document.getElementById('url').innerText.trim(),
+                company_name: document.getElementById('company_name').innerText.trim(),
+                company_address: document.getElementById('company_address').innerText.trim(),
+            };
+
+            const logo = document.getElementById('logo');
+            if (logo.src) {
+                data.logo = logo.src;
+            }
+
+            fetch('/save_title_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Data saved successfully!');
+                } else {
+                    alert('Error saving data: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>

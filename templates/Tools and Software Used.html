@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools/Software Used</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #31473A;
+        }
+        th {
+            background-color: #31473A;
+            color: #EDF4F2;
+        }
+        td {
+            background-color: #FFFFFF;
+            color: #31473A;
+        }
+        input[type="text"] {
+            width: 100%;
+            border: none;
+            background-color: #FFFFFF;
+            color: #31473A;
+            text-align: center;
+        }
+        .table-heading {
+            text-align: center;
+            background-color: #31473A;
+            color: #EDF4F2;
+            padding: 12px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+
+<table id="tools-table">
+    <thead>
+        <tr>
+            <th colspan="4" class="table-heading"><h1>Tools/Software Used</h1></th>
+        </tr>
+        <tr>
+            <th>Sl. No.</th>
+            <th>Name of Tool/Software Used</th>
+            <th>Version of the Tool/Software Used</th>
+            <th>Open Source/Licensed</th>
+        </tr>
+    </thead>
+    <tbody id="tools-table-body">
+        <!-- This will be populated by JavaScript -->
+    </tbody>
+</table>
+
+<div class="button-container">
+    <button onclick="saveTable()">Save</button>
+    <button onclick="addRow()">Add Row</button>
+    <button onclick="deleteLastRow()">Delete Last Row</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const documentData = {{ tools_data|tojson|safe }};
+        const tableBody = document.getElementById('tools-table-body');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        if (documentData.length === 0) {
+            // Add a default row if no data is present
+            addRow();
+            updateSerialNumbers();
+        } else {
+            // Populate table with data
+            documentData.forEach((rowData, index) => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td contenteditable="true">${index + 1}</td>
+                    <td contenteditable="true">${rowData.toolName}</td>
+                    <td contenteditable="true">${rowData.toolVersion}</td>
+                    <td contenteditable="true">${rowData.toolType}</td>
+                `;
+                tableBody.appendChild(newRow);
+            });
+            updateSerialNumbers();
+        }
+    });
+
+    function saveTable() {
+        const tableData = [];
+        const rows = document.querySelectorAll('#tools-table tbody tr');
+        rows.forEach((row) => {
+            const rowData = {
+                serialNumber: row.cells[0].innerText,
+                toolName: row.cells[1].innerText,
+                toolVersion: row.cells[2].innerText,
+                toolType: row.cells[3].innerText
+            };
+            tableData.push(rowData);
+        });
+
+        fetch('/save_tools_data', {  // Make sure this endpoint matches your Flask route
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tableData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.redirect_url) {
+                localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                window.location.href = data.redirect_url;
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function addRow() {
+        const tableBody = document.getElementById('tools-table-body');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+        `;
+        tableBody.appendChild(newRow);
+        updateSerialNumbers();
+    }
+
+    function deleteLastRow() {
+        const tableBody = document.getElementById('tools-table-body');
+        const rowCount = tableBody.rows.length;
+        if (rowCount > 1) { // Ensure at least one row remains
+            tableBody.deleteRow(rowCount - 1);
+        } else {
+            alert('Cannot delete the last row.');
+        }
+        updateSerialNumbers();
+    }
+
+    function updateSerialNumbers() {
+        const rows = document.querySelectorAll('#tools-table tbody tr');
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", updateSerialNumbers);
+</script>
+
+</body>
+</html>

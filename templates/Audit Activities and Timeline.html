@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Activities and Timelines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #31473A;
+        }
+        th {
+            background-color: #31473A;
+            color: #EDF4F2;
+        }
+        td {
+            background-color: #FFFFFF;
+            color: #31473A;
+        }
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            border: none;
+            background-color: #FFFFFF;
+            color: #31473A;
+            text-align: center;
+        }
+        .table-heading {
+            text-align: center;
+            background-color: #31473A;
+            color: #EDF4F2;
+            padding: 12px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+
+<table id="audit-timeline-table">
+    <thead>
+        <tr>
+            <th colspan="4" class="table-heading"><h1>Audit Activities and Timelines</h1></th>
+        </tr>
+        <tr>
+            <th>Sl. No.</th>
+            <th>Activities</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+    </thead>
+    <tbody id="audit-timeline-table-body">
+        <!-- This will be populated by JavaScript -->
+    </tbody>
+</table>
+
+<div class="button-container">
+    <button onclick="saveTable()">Save</button>
+    <button onclick="addRow()">Add Row</button>
+    <button onclick="deleteLastRow()">Delete Last Row</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const auditTimelineData = {{ audit_timeline_data|tojson }};
+        const tableBody = document.getElementById('audit-timeline-table-body');
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        if (auditTimelineData.length === 0) {
+            // Add a default row if no data is present
+            addRow();
+        } else {
+            // Populate table with data
+            auditTimelineData.forEach(rowData => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td contenteditable="true">${rowData.s_no}</td>
+                    <td contenteditable="true">${rowData.activities}</td>
+                    <td contenteditable="true">${rowData.start_date}</td>
+                    <td contenteditable="true">${rowData.end_date}</td>
+                `;
+                tableBody.appendChild(newRow);
+            });
+        }
+    });
+
+    function saveTable() {
+        const tableData = [];
+        const rows = document.querySelectorAll('#audit-timeline-table tbody tr');
+        rows.forEach(row => {
+            const rowData = {
+                s_no: row.cells[0].innerText,
+                activities: row.cells[1].innerText,
+                start_date: row.cells[2].innerText,
+                end_date: row.cells[3].innerText
+            };
+            tableData.push(rowData);
+        });
+
+        fetch('/save_audit_timeline', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tableData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.redirect_url) {
+                localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                window.location.href = data.redirect_url;
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function addRow() {
+        const tableBody = document.getElementById('audit-timeline-table-body');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+        `;
+        tableBody.appendChild(newRow);
+    }
+
+    function deleteLastRow() {
+        const tableBody = document.getElementById('audit-timeline-table-body');
+        const rowCount = tableBody.rows.length;
+        if (rowCount > 1) { // Ensure at least one row remains
+            tableBody.deleteRow(rowCount - 1);
+        } else {
+            alert('Cannot delete the last row.');
+        }
+    }
+</script>
+
+</body>
+</html>

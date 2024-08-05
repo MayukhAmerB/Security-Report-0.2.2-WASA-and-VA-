@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contents</title>
+    <style>
+        @media print {
+            .new-page {
+                page-break-before: always;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .table-container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border: 2px solid #31473A;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 2px solid #31473A;
+            vertical-align: top;
+        }
+        th {
+            background-color: #31473A;
+            color: #EDF4F2;
+            font-weight: bold;
+        }
+        th.table-title {
+            text-align: center;
+        }
+        td[contenteditable="true"] {
+            background-color: white;
+            cursor: text;
+        }
+        td:focus {
+            outline: none;
+            background-color: #EDF4F2;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container new-page">
+        <table id="contents-table">
+            <thead>
+                <tr>
+                    <th class="table-title">Contents</th>
+                    <th class="table-title">Page Number</th>
+                </tr>
+            </thead>
+            <tbody id="contents-table-body">
+                <tr>
+                    <td>Introduction</td>
+                    <td contenteditable="true" style="text-align: right;">4</td>
+                </tr>
+                <tr>
+                    <td>Engagement Scope</td>
+                    <td contenteditable="true" style="text-align: right;">5</td>
+                </tr>
+                <tr>
+                    <td>Details of the Auditing Team</td>
+                    <td contenteditable="true" style="text-align: right;">6</td>
+                </tr>
+                <tr>
+                    <td>Audit Activities and Timelines</td>
+                    <td contenteditable="true" style="text-align: right;">7</td>
+                </tr>
+                <tr>
+                    <td>Audit Methodology and Criteria / Standard referred for audit</td>
+                    <td contenteditable="true" style="text-align: right;">8</td>
+                </tr>
+                <tr>
+                    <td>Tools/ Software used</td>
+                    <td contenteditable="true" style="text-align: right;">8</td>
+                </tr>
+                <tr>
+                    <td>Executive Summary</td>
+                    <td contenteditable="true" style="text-align: right;">10</td>
+                </tr>
+                <tr>
+                    <td>Detailed Observations</td>
+                    <td contenteditable="true" style="text-align: right;">14</td>
+                </tr>
+                <tr>
+                    <td>Appendices</td>
+                    <td contenteditable="true" style="text-align: right;">48</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="button-container">
+        <button onclick="saveTable()">Save</button>
+        <button onclick="addRow()">Add Row</button>
+        <button onclick="deleteLastRow()">Delete Last Row</button>
+    </div>
+    <script>
+        const staticTitles = [
+            "Introduction",
+            "Engagement Scope",
+            "Details of the Auditing Team",
+            "Audit Activities and Timelines",
+            "Audit Methodology and Criteria / Standard referred for audit",
+            "Tools/ Software used",
+            "Executive Summary",
+            "Detailed Observations",
+            "Appendices"
+        ];
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const tableBody = document.getElementById('contents-table-body');
+            tableBody.innerHTML = ''; // Clear existing rows
+            staticTitles.forEach((title, index) => {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${title}</td>
+                    <td contenteditable="true" style="text-align: right;">${index + 4}</td>
+                `;
+                tableBody.appendChild(newRow);
+            });
+        });
+
+        function saveTable() {
+            const tableData = [];
+            const rows = document.querySelectorAll('#contents-table-body tr');
+            rows.forEach((row, index) => {
+                const rowData = {
+                    title: staticTitles[index],
+                    page: row.cells[1].innerText
+                };
+                tableData.push(rowData);
+            });
+
+            fetch('/save_contents', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tableData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function addRow() {
+            const tableBody = document.getElementById('contents-table-body');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td contenteditable="true"></td>
+                <td contenteditable="true" style="text-align: right;"></td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+
+        function deleteLastRow() {
+            const tableBody = document.getElementById('contents-table-body');
+            const rowCount = tableBody.rows.length;
+            if (rowCount > staticTitles.length) { // Ensure static rows remain
+                tableBody.deleteRow(rowCount - 1);
+            } else {
+                alert('Cannot delete the last row.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Methodology and Criteria</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #31473A;
+            border-radius: 5px;
+            background-color: #FFFFFF;
+            color: #31473A;
+            font-size: 16px;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Audit Methodology and Criteria</h1>
+        <textarea id="methodology-text">
+Website/web application security assessment is a form of security testing used to analyse security posture of a web site/application. That built on OWASP Web Application Top 10 vulnerability standard & SANS 25 standard. Website/application security methodology is kept up-to-date according to changes in the threat environment and industry best practices provides consistency and structure to security testing. ITOrizin Technology Solutions Pvt Ltd keeps its Web site/Application Security Assessment methodology updated with new tools, processes, techniques, or as trend develops. Our methodology is a comprehensive blend of the following methodologies and IT Security industry best practices:
+- Open-Source Security Testing Methodology Manual (OSSTMM) from the Institute for Security and Open Methodologies (ISECOM);
+- NIST SP 800-115 Technical Guide to Information Security Testing and Assessment;
+- OWASP Top 10 vulnerability;
+- SANS 25 standard.
+        </textarea>
+    </div>
+    <div class="button-container">
+        <button onclick="saveMethodology()">Save</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const documentData = {{ audit_methodology_criteria_data|tojson|default({}) }};
+            const textarea = document.getElementById('methodology-text');
+            if (documentData) {
+                textarea.value = documentData.methodology || textarea.value;
+            }
+        });
+
+        function saveMethodology() {
+            const methodologyText = document.getElementById('methodology-text').value;
+
+            fetch('/save_audit_methodology_and_criteria', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ methodology: methodologyText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

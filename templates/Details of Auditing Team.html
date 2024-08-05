@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details of the Auditing Team</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .table-container {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #31473A;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #31473A;
+            color: white;
+        }
+        td {
+            background-color: #EDF4F2;
+        }
+        td[contenteditable="true"] {
+            background-color: white;
+        }
+        .table-header {
+            text-align: center;
+            font-weight: bold;
+            background-color: #EDF4F2;
+            color: #31473A;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <table id="auditing-team-table">
+            <thead>
+                <tr>
+                    <th colspan="6" class="table-header">Details of the Auditing Team</th>
+                </tr>
+                <tr>
+                    <th>S. No</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Email Id</th>
+                    <th>Professional Qualifications/ Certifications</th>
+                    <th>Whether the resource has Been listed in the Snapshot information published on CERT-In’s website (Yes/No)</th>
+                </tr>
+            </thead>
+            <tbody id="auditing-team-table-body">
+                <!-- This will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    <div class="button-container">
+        <button onclick="saveTable()">Save</button>
+        <button onclick="addRow()">Add Row</button>
+        <button onclick="deleteLastRow()">Delete Last Row</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const auditingTeamData = {{ auditing_team_data|tojson }};
+            const tableBody = document.getElementById('auditing-team-table-body');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            if (auditingTeamData.length === 0) {
+                // Add a default row if no data is present
+                addRow();
+            } else {
+                // Populate table with data
+                auditingTeamData.forEach(rowData => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td contenteditable="true">${rowData.s_no}</td>
+                        <td contenteditable="true">${rowData.name}</td>
+                        <td contenteditable="true">${rowData.designation}</td>
+                        <td contenteditable="true">${rowData.email}</td>
+                        <td contenteditable="true">${rowData.qualifications}</td>
+                        <td contenteditable="true">${rowData.listed}</td>
+                    `;
+                    tableBody.appendChild(newRow);
+                });
+            }
+        });
+
+        function saveTable() {
+            const tableData = [];
+            const rows = document.querySelectorAll('#auditing-team-table-body tr');
+            rows.forEach(row => {
+                const rowData = {
+                    s_no: row.cells[0].innerText,
+                    name: row.cells[1].innerText,
+                    designation: row.cells[2].innerText,
+                    email: row.cells[3].innerText,
+                    qualifications: row.cells[4].innerText,
+                    listed: row.cells[5].innerText
+                };
+                tableData.push(rowData);
+            });
+
+            fetch('/save_auditing_team', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tableData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function addRow() {
+            const tableBody = document.getElementById('auditing-team-table-body');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+
+        function deleteLastRow() {
+            const tableBody = document.getElementById('auditing-team-table-body');
+            const rowCount = tableBody.rows.length;
+            if (rowCount > 1) { // Ensure at least one row remains
+                tableBody.deleteRow(rowCount - 1);
+            } else {
+                alert('Cannot delete the last row.');
+            }
+        }
+    </script>
+</body>
+</html>

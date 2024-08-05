@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWASP Top 2021 Vulnerabilities</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #31473A;
+            padding: 8px;
+            text-align: left;
+        }
+
+        thead th {
+            background-color: #31473A;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #EDF4F2;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        select {
+            width: 100%;
+            border: none;
+            background-color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 8px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <p class="title"><strong>OWASP Top 2021 Ten Most Critical Web Application Vulnerabilities Mapping</strong></p>
+    </div>
+    <table id="owasp-table">
+        <thead>
+            <tr>
+                <th>Sl. No.</th>
+                <th>Security Risk</th>
+                <th>Present in Web Application</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Pre-defined rows -->
+            <tr>
+                <td>1</td>
+                <td>Broken Authentication</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Cryptographic Failures</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Injection</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Insecure Design</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Security Misconfiguration</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Vulnerable and Outdated Components</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Identification and Authentication Failures</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Software and Data Integrity Failures</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Security Logging and Monitoring Failures</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Server-Side Request Forgery (SSRF)</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <button onclick="saveTable()">Save</button>
+        <button onclick="addRow()">Add Row</button>
+        <button onclick="deleteLastRow()">Delete Last Row</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const documentData = {{ owasp_data|tojson|default([]) }};
+            const tableBody = document.querySelector('#owasp-table tbody');
+
+            // Populate table with data
+            if (documentData.length > 0) {
+                documentData.forEach((rowData, index) => {
+                    const row = tableBody.rows[index];
+                    if (row) {
+                        const select = row.cells[2].querySelector('select');
+                        select.value = rowData.present;
+                    }
+                });
+            }
+        });
+
+        function saveTable() {
+            const tableData = [];
+            const rows = document.querySelectorAll('#owasp-table tbody tr');
+            rows.forEach((row, index) => {
+                const rowData = {
+                    s_no: row.cells[0].innerText,
+                    security_risk: row.cells[1].innerText,
+                    present: row.cells[2].querySelector('select').options[row.cells[2].querySelector('select').selectedIndex].text
+                };
+                tableData.push(rowData);
+            });
+
+            fetch('/save_owasp_vulnerabilities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tableData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+
+        function addRow() {
+            const table = document.querySelector('#owasp-table tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td></td>
+                <td contenteditable="true"></td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            `;
+            table.appendChild(newRow);
+            updateSerialNumbers();
+        }
+
+        function deleteLastRow() {
+            const table = document.querySelector('#owasp-table tbody');
+            const rowCount = table.rows.length;
+            if (rowCount > 1) { // Ensure at least one row remains
+                table.deleteRow(rowCount - 1);
+            } else {
+                alert('Cannot delete the last row.');
+            }
+            updateSerialNumbers();
+        }
+
+        function updateSerialNumbers() {
+            const rows = document.querySelectorAll('#owasp-table tbody tr');
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1;
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", updateSerialNumbers);
+    </script>
+</body>
+</html>

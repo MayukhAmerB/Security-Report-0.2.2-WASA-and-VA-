@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANS-25 Most Critical Web Application Vulnerabilities Mapping</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EDF4F2;
+            color: #31473A;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #31473A;
+            padding: 8px;
+            text-align: left;
+        }
+
+        thead th {
+            background-color: #31473A;
+            color: white;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #EDF4F2;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        select {
+            width: 100%;
+            border: none;
+            background-color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            padding: 8px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #31473A;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FFFFFF;
+            color: #31473A;
+            border: 2px solid #31473A;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <p class="title"><strong>SANS-25 Most Critical Web Application Vulnerabilities Mapping</strong></p>
+    </div>
+    <table id="sans-table">
+        <thead>
+            <tr>
+                <th>Sl. No.</th>
+                <th>Security Risk</th>
+                <th>Present in Web Application</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Pre-defined rows -->
+            <tr>
+                <td>1</td>
+                <td>Out-of-bounds Write</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Improper Input Validation</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Out-of-bounds Read</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Use After Free</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Cross-Site Request Forgery (CSRF)</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Unrestricted Upload of File with Dangerous Type</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>NULL Pointer Dereference</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Deserialization of Untrusted Data</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>Integer Overflow or Wraparound</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>Improper Authentication</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>Use of Hard-coded Credentials</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>Missing Authorization</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>Improper Neutralization of Special Elements used in a Command ('Command Injection')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>Missing Authentication for Critical Function</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>Improper Restriction of Operations within the Bounds of a Memory Buffer</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>Incorrect Default Permissions</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>21</td>
+                <td>Server-Side Request Forgery (SSRF)</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>22</td>
+                <td>Concurrent Execution using Shared Resource with Improper Synchronization ('Race Condition')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>23</td>
+                <td>Uncontrolled Resource Consumption</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>24</td>
+                <td>Improper Restriction of XML External Entity Reference</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>25</td>
+                <td>Improper Control of Generation of Code ('Code Injection')</td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <button onclick="saveTable()">Save</button>
+        <button onclick="addRow()">Add Row</button>
+        <button onclick="deleteLastRow()">Delete Last Row</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const documentData = {{ sans_data|tojson|default([]) }};
+            const tableBody = document.querySelector('#sans-table tbody');
+
+            // Populate table with data
+            if (documentData.length > 0) {
+                documentData.forEach((rowData, index) => {
+                    const row = tableBody.rows[index];
+                    if (row) {
+                        const select = row.cells[2].querySelector('select');
+                        select.value = rowData.present;
+                    }
+                });
+            }
+        });
+
+        function saveTable() {
+            const tableData = [];
+            const rows = document.querySelectorAll('#sans-table tbody tr');
+            rows.forEach((row, index) => {
+                const rowData = {
+                    s_no: row.cells[0].innerText,
+                    security_risk: row.cells[1].innerText,
+                    present: row.cells[2].querySelector('select').options[row.cells[2].querySelector('select').selectedIndex].text
+                };
+                tableData.push(rowData);
+            });
+
+            fetch('/save_sans_vulnerabilities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(tableData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.redirect_url) {
+                    localStorage.setItem('documentSaved', 'true');  // Set flag in local storage
+                    window.location.href = data.redirect_url;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        function addRow() {
+            const table = document.querySelector('#sans-table tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td></td>
+                <td contenteditable="true"></td>
+                <td>
+                    <select>
+                        <option value="No">No (Examined & Not Found)</option>
+                        <option value="Yes">Yes (Found)</option>
+                    </select>
+                </td>
+            `;
+            table.appendChild(newRow);
+            updateSerialNumbers();
+        }
+
+        function deleteLastRow() {
+            const table = document.querySelector('#sans-table tbody');
+            const rowCount = table.rows.length;
+            if (rowCount > 1) { // Ensure at least one row remains
+                table.deleteRow(rowCount - 1);
+            } else {
+                alert('Cannot delete the last row.');
+            }
+            updateSerialNumbers();
+        }
+
+        function updateSerialNumbers() {
+            const rows = document.querySelectorAll('#sans-table tbody tr');
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1;
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", updateSerialNumbers);
+    </script>
+</body>
+</html>
